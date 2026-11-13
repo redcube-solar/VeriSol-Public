@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VeriSol Verify</title>
+<style>
+  :root { --green:#0E7C4A; --maroon:#5C1A2B; --orange:#E85D1A; --cream:#FFF6EE; --line:#F1DCCB; --ink:#3a2a2e; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background:var(--cream); color:var(--ink); }
+  header { background:var(--maroon); color:#fff; padding:14px 16px; }
+  header b { color:#7fe0ae; font-size:20px; }
+  header span { display:block; font-size:12px; opacity:.85; }
+  main { max-width:560px; margin:0 auto; padding:12px; }
+  section { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px; margin-bottom:12px; }
+  section.off { opacity:.45; pointer-events:none; }
+  h2 { margin:0 0 10px; font-size:16px; color:var(--maroon); }
+  h2 i { font-style:normal; display:inline-block; width:24px; height:24px; line-height:24px; text-align:center; border-radius:50%; background:var(--orange); color:#fff; font-size:13px; margin-right:6px; }
+  label { display:block; font-size:12px; margin:8px 0 3px; color:#5A4A4E; }
+  input, select { width:100%; padding:10px; font-size:16px; border:1px solid #d9c7b8; border-radius:8px; background:#fff; }
+  .row { display:flex; gap:8px; } .row > div { flex:1; }
+  button { width:100%; margin-top:12px; padding:12px; font-size:16px; font-weight:600; border:0; border-radius:8px; background:var(--green); color:#fff; }
+  button.alt { background:#fff; color:var(--maroon); border:1px solid var(--maroon); }
+  button:disabled { opacity:.5; }
+  #msg { position:sticky; top:0; z-index:5; padding:10px 12px; border-radius:8px; margin-bottom:12px; display:none; font-size:14px; }
+  #msg.ok { display:block; background:#E4F2EA; color:#145c38; } #msg.bad { display:block; background:#fbe3e0; color:#8f2218; }
+  ul { margin:8px 0 0; padding-left:18px; font-size:13px; }
+  .tally { font-size:14px; margin-top:8px; } .tally b { color:var(--green); }
+  video { width:100%; border-radius:8px; margin-top:8px; display:none; background:#000; }
+  .check { display:flex; gap:8px; align-items:flex-start; font-size:13px; margin-top:10px; } .check input { width:auto; margin-top:2px; }
+  small { color:#7a6a6e; }
+</style>
+</head>
+<body>
+<header><b>VeriSol</b> Verify<span>Installer app · prototype</span></header>
+<main>
+  <div id="msg"></div>
+
+  <section id="s1">
+    <h2><i>1</i>Open commissioning session</h2>
+    <label>Consumer ID</label><input id="consumer" autocomplete="off">
+    <div class="row">
+      <div><label>Scheme</label><select id="scheme"><option>PMSGY</option><option>ULA</option></select></div>
+      <div><label>Claimed kW</label><input id="kw" type="number" step="0.01" inputmode="decimal"></div>
+    </div>
+    <label>Vendor ID</label><input id="vendor" autocomplete="off">
+    <div class="row">
+      <div><label>Roof latitude</label><input id="lat" type="number" step="any" inputmode="decimal"></div>
+      <div><label>Roof longitude</label><input id="lon" type="number" step="any" inputmode="decimal"></div>
+    </div>
+    <small>In production the roof location comes from the National Portal record, not from the installer.</small>
+    <button class="alt" id="useGps" type="button">Use my current location (demo)</button>
+    <button id="open" type="button">Open session</button>
+  </section>
+
+  <section id="s2" class="off">
+    <h2><i>2</i>Scan every module on the roof</h2>
+    <label>Module serial</label><input id="serial" autocomplete="off" autocapitalize="characters">
+    <div class="row">
+      <div><button class="alt" id="cam" type="button">Scan with camera</button></div>
+      <div><button id="add" type="button">Add serial</button></div>
+    </div>
+    <video id="video" playsinline muted></video>
+    <div class="tally" id="tally"></div>
+    <ul id="mods"></ul>
+  </section>
+
+  <section id="s3" class="off">
+    <h2><i>3</i>Measure the array</h2>
+    <div class="row">
+      <div><label>Length (m)</label><input id="len" type="number" step="0.01" inputmode="decimal"></div>
+      <div><label>Width (m)</label><input id="wid" type="number" step="0.01" inputmode="decimal"></div>
+    </div>
+    <div class="row">
+      <div><label>Tilt (degrees)</label><input id="tilt" type="number" step="1" inputmode="numeric" value="15"></div>
+      <div><label>Facing (0 = north, 180 = south)</label><input id="az" type="number" step="1" inputmode="numeric" value="180"></div>
+    </div>
+    <small>Tape-measure entry for now. AR-guided measurement is planned.</small>
+    <button id="saveArr" type="button">Save measurement</button>
+  </section>
+
+  <section id="s4" class="off">
+    <h2><i>4</i>Lock and finish</h2>
+    <div class="check" id="ulaBox" style="display:none">
+      <input type="checkbox" id="undertaking">
+      <label for="undertaking" style="margin:0">The beneficiary accepts custody of this publicly funded system and undertakes not to remove, sell or transfer any part of it.</label>
+    </div>
+    <small>After locking, nothing can be changed and these serials belong to this roof.</small>
+    <button id="lock" type="button">Lock session</button>
+  </section>
+</main>
+<script src="/web/app.js"></script>
+</body>
+</html>

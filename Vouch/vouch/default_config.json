@@ -1,0 +1,42 @@
+{
+  "_comment": "Vouch Score calibration. Every number here is a starting value to be tuned against field inspection results. Edit this file, not the code.",
+  "weights": {
+    "identity": 0.25,
+    "capacity": 0.35,
+    "persistence": 0.25,
+    "consistency": 0.15
+  },
+  "bands": {
+    "green_min": 80,
+    "amber_min": 50
+  },
+  "capacity": {
+    "tolerance": 0.10,
+    "zero_score_gap": 0.40
+  },
+  "identity": {
+    "nameplate_tolerance": 0.05,
+    "not_scanned_score": 60,
+    "inventory_fail_penalty": 30
+  },
+  "persistence": {
+    "footprint_ok_ratio": 0.90,
+    "footprint_gone_ratio": 0.25,
+    "zero_export_amber_days": 45,
+    "zero_export_red_days": 90,
+    "fault_logged_relief": 25
+  },
+  "consistency": {
+    "agree_within": 0.15,
+    "zero_score_gap": 0.50
+  },
+  "missing_component_score": 60,
+  "hard_caps": {
+    "duplicate_serial": 30,
+    "array_missing": 20,
+    "never_generated": 20,
+    "capacity_gap_over_red": 45
+  },
+  "red_capacity_gap": 0.20,
+  "meter_supports_claim_within": 0.15
+}
